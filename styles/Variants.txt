@@ -1,0 +1,36 @@
+Dark Blue
+
+@mainColor = #031d32	
+@secondColor = #04253e
+@ButtonColor = #24394c
+@ButtonPressed = #34526d	
+@ButtonFocus = #436a8c
+@ButtonHover = #304d66
+
+@ButtonGRPressed = #304550
+@ButtonGRHover = #507590
+
+@TabColor = #24394c
+@TabPane = #031d32	
+@TabSelected = #031d32
+@TableViewAlt = #08253e
+@TableViewHeadBG = #04253e
+
+@GridLineColor = #2c313a
+@TableItemSelected = #34526d
+
+@HeaderViewSection = #21252b
+@HeaderViewSectionBorder = #2c313c
+
+@ScrollBarBG = #6272a4
+@ScrollBarHandle = #34526d
+
+@ProgressBarBG = #333333
+@ProgressBarChunk = #2765a4
+
+@SpinBoxBG = #04253e
+@SpinBoxSection = #24394c
+
+@MenuBackground = #2C3F50
+@MenuSelected = #34495E
+@MenuBorder = #2CCD70
