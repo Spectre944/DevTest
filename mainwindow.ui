@@ -34,6 +34,7 @@
    <property name="font">
     <font>
      <pointsize>12</pointsize>
+     <weight>75</weight>
      <italic>false</italic>
      <bold>true</bold>
     </font>
@@ -203,6 +204,7 @@
       <property name="font">
        <font>
         <pointsize>12</pointsize>
+        <weight>75</weight>
         <italic>false</italic>
         <bold>true</bold>
        </font>
@@ -276,6 +278,7 @@
             <property name="font">
              <font>
               <pointsize>11</pointsize>
+              <weight>50</weight>
               <italic>false</italic>
               <bold>false</bold>
              </font>
@@ -299,12 +302,13 @@
          <property name="font">
           <font>
            <pointsize>12</pointsize>
+           <weight>50</weight>
            <italic>false</italic>
            <bold>false</bold>
           </font>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="pageDevices">
           <property name="enabled">
@@ -367,6 +371,7 @@
                 <property name="font">
                  <font>
                   <pointsize>12</pointsize>
+                  <weight>75</weight>
                   <italic>true</italic>
                   <bold>true</bold>
                  </font>
@@ -437,20 +442,85 @@
                 <property name="spacing">
                  <number>5</number>
                 </property>
-                <item row="0" column="4">
-                 <widget class="QLabel" name="labelSVDerStat">
+                <item row="2" column="1" colspan="2">
+                 <widget class="QLabel" name="labelSVFrontDER">
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
-                    <bold>false</bold>
+                    <bold>true</bold>
                     <strikeout>false</strikeout>
                     <kerning>true</kerning>
                    </font>
                   </property>
                   <property name="text">
-                   <string>Стат. похибка
-3%</string>
+                   <string>Пер. БД 
+0.30 мкЗв/г</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="3" colspan="2">
+                 <widget class="QLabel" name="labelSVRightDER">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <strikeout>false</strikeout>
+                    <kerning>true</kerning>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Прав. БД
+0.28 мкЗв/г</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2" colspan="3">
+                 <widget class="QLabel" name="labelCarEmitDirectionValue">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>50</weight>
+                    <italic>false</italic>
+                    <bold>false</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Кут опром.
+0 °</string>
+                  </property>
+                  <property name="textFormat">
+                   <enum>Qt::AutoText</enum>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="3" colspan="2">
+                 <widget class="QLabel" name="labelSVLeftDER">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <strikeout>false</strikeout>
+                    <kerning>true</kerning>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Лів. БД
+0.27 мкЗв/г</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -462,6 +532,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -473,6 +544,55 @@
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_3">
+                  <property name="minimumSize">
+                   <size>
+                    <width>30</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>30</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="pixmap">
+                   <pixmap resource="ico.qrc">:/images/rad.png</pixmap>
+                  </property>
+                  <property name="scaledContents">
+                   <bool>true</bool>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1" colspan="2">
+                 <widget class="QLabel" name="labelSVBackDER">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <strikeout>false</strikeout>
+                    <kerning>true</kerning>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Задн. БД
+0.41 мкЗв/г</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
                   </property>
                  </widget>
                 </item>
@@ -519,132 +639,31 @@
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="2" colspan="3">
-                 <widget class="QLabel" name="labelCarEmitDirectionValue">
+                <item row="0" column="4">
+                 <widget class="QLabel" name="labelSVDerStat">
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Кут опром.
-0 °</string>
-                  </property>
-                  <property name="textFormat">
-                   <enum>Qt::AutoText</enum>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="3" colspan="2">
-                 <widget class="QLabel" name="labelSVLeftDER">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <italic>false</italic>
-                    <bold>true</bold>
                     <strikeout>false</strikeout>
                     <kerning>true</kerning>
                    </font>
                   </property>
                   <property name="text">
-                   <string>Лів. БД
-0.27 мкЗв/г</string>
+                   <string>Стат. похибка
+3%</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="1" colspan="2">
-                 <widget class="QLabel" name="labelSVFrontDER">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <italic>false</italic>
-                    <bold>true</bold>
-                    <strikeout>false</strikeout>
-                    <kerning>true</kerning>
-                   </font>
-                  </property>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label">
                   <property name="text">
-                   <string>Пер. БД 
-0.30 мкЗв/г</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="3" colspan="2">
-                 <widget class="QLabel" name="labelSVRightDER">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <italic>false</italic>
-                    <bold>true</bold>
-                    <strikeout>false</strikeout>
-                    <kerning>true</kerning>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Прав. БД
-0.28 мкЗв/г</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_3">
-                  <property name="minimumSize">
-                   <size>
-                    <width>30</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>30</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="pixmap">
-                   <pixmap resource="ico.qrc">:/images/rad.png</pixmap>
-                  </property>
-                  <property name="scaledContents">
-                   <bool>true</bool>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1" colspan="2">
-                 <widget class="QLabel" name="labelSVBackDER">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <italic>false</italic>
-                    <bold>true</bold>
-                    <strikeout>false</strikeout>
-                    <kerning>true</kerning>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Задн. БД
-0.41 мкЗв/г</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
+                   <string>Справний</string>
                   </property>
                  </widget>
                 </item>
@@ -667,6 +686,65 @@
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
              </property>
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+               <widget class="QPushButton" name="pushButtonSVDataReq">
+                <property name="text">
+                 <string>Запит даних</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkBoxManualMode">
+                <property name="text">
+                 <string>Ручний/Авто режим</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_8">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonSVSaveThreadhold">
+                <property name="text">
+                 <string>Зміна порогу ПЕД</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="doubleSpinBoxTH">
+                <property name="maximum">
+                 <double>10000000.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>
@@ -722,6 +800,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -739,6 +818,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -771,6 +851,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -788,6 +869,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -807,6 +889,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -826,6 +909,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -845,6 +929,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -867,6 +952,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -886,6 +972,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -905,6 +992,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -919,6 +1007,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -984,6 +1073,7 @@
                      <property name="font">
                       <font>
                        <pointsize>8</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                        <strikeout>false</strikeout>
@@ -1105,6 +1195,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -1149,6 +1240,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -1188,6 +1280,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -1205,6 +1298,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -1422,6 +1516,7 @@
                     <property name="font">
                      <font>
                       <pointsize>12</pointsize>
+                      <weight>50</weight>
                       <italic>false</italic>
                       <bold>false</bold>
                      </font>
@@ -1451,6 +1546,7 @@
                     <property name="font">
                      <font>
                       <pointsize>12</pointsize>
+                      <weight>50</weight>
                       <italic>false</italic>
                       <bold>false</bold>
                       <strikeout>false</strikeout>
@@ -1470,6 +1566,7 @@
                     <property name="font">
                      <font>
                       <pointsize>12</pointsize>
+                      <weight>50</weight>
                       <italic>false</italic>
                       <bold>false</bold>
                       <strikeout>false</strikeout>
@@ -1489,6 +1586,7 @@
                     <property name="font">
                      <font>
                       <pointsize>12</pointsize>
+                      <weight>50</weight>
                       <italic>false</italic>
                       <bold>false</bold>
                       <strikeout>false</strikeout>
@@ -1508,6 +1606,7 @@
                     <property name="font">
                      <font>
                       <pointsize>12</pointsize>
+                      <weight>50</weight>
                       <italic>false</italic>
                       <bold>false</bold>
                       <strikeout>false</strikeout>
@@ -1529,6 +1628,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -1637,6 +1737,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -1656,6 +1757,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -1706,6 +1808,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -1737,6 +1840,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -1832,6 +1936,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -1851,6 +1956,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -1870,6 +1976,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -1889,6 +1996,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -1911,6 +2019,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -1933,6 +2042,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -1952,6 +2062,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -1971,6 +2082,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -1990,6 +2102,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -2009,6 +2122,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -2028,6 +2142,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -2047,6 +2162,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -2066,6 +2182,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -2088,6 +2205,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -2135,6 +2253,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -2158,6 +2277,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -2177,6 +2297,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -2199,6 +2320,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -2218,6 +2340,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -2237,6 +2360,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -2256,6 +2380,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -2275,6 +2400,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -2294,6 +2420,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <strikeout>false</strikeout>
@@ -2313,6 +2440,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -2332,6 +2460,7 @@
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
+                    <weight>75</weight>
                     <italic>false</italic>
                     <bold>true</bold>
                     <strikeout>false</strikeout>
@@ -2427,6 +2556,7 @@
                 <property name="font">
                  <font>
                   <pointsize>12</pointsize>
+                  <weight>75</weight>
                   <italic>true</italic>
                   <bold>true</bold>
                  </font>
@@ -2444,6 +2574,7 @@
              <property name="font">
               <font>
                <pointsize>12</pointsize>
+               <weight>50</weight>
                <italic>false</italic>
                <bold>false</bold>
               </font>
@@ -2499,6 +2630,7 @@
                       <property name="font">
                        <font>
                         <pointsize>12</pointsize>
+                        <weight>50</weight>
                         <italic>false</italic>
                         <bold>false</bold>
                        </font>
@@ -2522,6 +2654,7 @@
                       <property name="font">
                        <font>
                         <pointsize>12</pointsize>
+                        <weight>50</weight>
                         <italic>false</italic>
                         <bold>false</bold>
                        </font>
@@ -2547,6 +2680,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2564,6 +2698,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2591,6 +2726,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2614,6 +2750,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2637,6 +2774,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>75</weight>
                        <italic>false</italic>
                        <bold>true</bold>
                       </font>
@@ -2657,6 +2795,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2683,6 +2822,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2713,6 +2853,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2730,6 +2871,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>75</weight>
                        <italic>false</italic>
                        <bold>true</bold>
                       </font>
@@ -2750,6 +2892,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2767,6 +2910,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>75</weight>
                        <italic>false</italic>
                        <bold>true</bold>
                       </font>
@@ -2781,6 +2925,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2798,6 +2943,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2821,6 +2967,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2856,6 +3003,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2882,6 +3030,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2902,6 +3051,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2919,6 +3069,7 @@
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -2982,6 +3133,7 @@
                       <property name="font">
                        <font>
                         <pointsize>12</pointsize>
+                        <weight>50</weight>
                         <italic>false</italic>
                         <bold>false</bold>
                        </font>
@@ -3005,6 +3157,7 @@
                       <property name="font">
                        <font>
                         <pointsize>12</pointsize>
+                        <weight>50</weight>
                         <italic>false</italic>
                         <bold>false</bold>
                        </font>
@@ -3046,6 +3199,7 @@
                       <property name="font">
                        <font>
                         <pointsize>12</pointsize>
+                        <weight>50</weight>
                         <italic>false</italic>
                         <bold>false</bold>
                        </font>
@@ -3069,6 +3223,7 @@
                       <property name="font">
                        <font>
                         <pointsize>12</pointsize>
+                        <weight>50</weight>
                         <italic>false</italic>
                         <bold>false</bold>
                        </font>
@@ -3140,6 +3295,7 @@
                    <property name="font">
                     <font>
                      <pointsize>12</pointsize>
+                     <weight>50</weight>
                      <italic>false</italic>
                      <bold>false</bold>
                     </font>
@@ -3176,6 +3332,7 @@
                    <property name="font">
                     <font>
                      <pointsize>12</pointsize>
+                     <weight>50</weight>
                      <italic>false</italic>
                      <bold>false</bold>
                     </font>
@@ -3238,6 +3395,7 @@
                    <property name="font">
                     <font>
                      <pointsize>12</pointsize>
+                     <weight>75</weight>
                      <italic>false</italic>
                      <bold>true</bold>
                     </font>
@@ -3258,6 +3416,7 @@
                    <property name="font">
                     <font>
                      <pointsize>12</pointsize>
+                     <weight>50</weight>
                      <italic>false</italic>
                      <bold>false</bold>
                     </font>
@@ -3294,6 +3453,7 @@
                    <property name="font">
                     <font>
                      <pointsize>12</pointsize>
+                     <weight>50</weight>
                      <italic>false</italic>
                      <bold>false</bold>
                     </font>
@@ -3311,6 +3471,7 @@
                    <property name="font">
                     <font>
                      <pointsize>12</pointsize>
+                     <weight>75</weight>
                      <italic>false</italic>
                      <bold>true</bold>
                     </font>
@@ -3331,6 +3492,7 @@
                    <property name="font">
                     <font>
                      <pointsize>12</pointsize>
+                     <weight>50</weight>
                      <italic>false</italic>
                      <bold>false</bold>
                     </font>
@@ -3412,6 +3574,7 @@
                    <property name="font">
                     <font>
                      <pointsize>12</pointsize>
+                     <weight>50</weight>
                      <italic>false</italic>
                      <bold>false</bold>
                     </font>
@@ -3438,6 +3601,7 @@
                    <property name="font">
                     <font>
                      <pointsize>12</pointsize>
+                     <weight>50</weight>
                      <italic>false</italic>
                      <bold>false</bold>
                     </font>
@@ -3500,6 +3664,7 @@
                    <property name="font">
                     <font>
                      <pointsize>12</pointsize>
+                     <weight>50</weight>
                      <italic>false</italic>
                      <bold>false</bold>
                     </font>
@@ -3587,6 +3752,7 @@
          <property name="font">
           <font>
            <pointsize>11</pointsize>
+           <weight>75</weight>
            <italic>false</italic>
            <bold>true</bold>
           </font>
@@ -3629,6 +3795,7 @@
          <property name="font">
           <font>
            <pointsize>11</pointsize>
+           <weight>75</weight>
            <italic>false</italic>
            <bold>true</bold>
           </font>
@@ -3671,6 +3838,7 @@
          <property name="font">
           <font>
            <pointsize>11</pointsize>
+           <weight>75</weight>
            <italic>false</italic>
            <bold>true</bold>
           </font>
@@ -3709,6 +3877,7 @@
          <property name="font">
           <font>
            <pointsize>11</pointsize>
+           <weight>75</weight>
            <italic>false</italic>
            <bold>true</bold>
           </font>
@@ -3747,6 +3916,7 @@
          <property name="font">
           <font>
            <pointsize>11</pointsize>
+           <weight>75</weight>
            <italic>false</italic>
            <bold>true</bold>
           </font>
@@ -3820,6 +3990,7 @@
          <property name="font">
           <font>
            <pointsize>11</pointsize>
+           <weight>75</weight>
            <italic>false</italic>
            <bold>true</bold>
           </font>

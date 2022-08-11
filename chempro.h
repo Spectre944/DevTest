@@ -59,6 +59,7 @@ class ChemPro
 {
 
 public:
+
     ChemPro();
 
     QString getSensorStatus(unsigned char FCode);
