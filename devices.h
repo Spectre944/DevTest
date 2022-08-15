@@ -16,7 +16,7 @@
 #define MIN_TIME        100          // Мин. время ожидания страховочного таймера - в случае ошибки
 #define WAIT_SAVE_TIME  10          // Время ожидания окончания записи
 #define PROCESS_TIME    1000        // Время срабатывания таймера запросов
-#define SVNG_PORT       "COM5"      // Порт, закрепленный за СВНГ-Т (уточнить по МОХА)
+#define SVNG_PORT       "COM20"      // Порт, закрепленный за СВНГ-Т (уточнить по МОХА)
 #define MIN_PED         1e-6        // Минимальное значение ПЕД
 
 
@@ -98,7 +98,7 @@ public slots:
     /*
     *  Слот открытия СОМ-порта СВНГ-Т
     */
-    bool openSvngSerialPort(const QString & portName);
+    bool openSvngSerialPort(const QString & portName); // openSvngSerialPort closeSvngSerialPort writeSvngData readSvngData checkSvngCRC
 
     /*
     *  Слот закрытия СОМ-порта СВНГ-Т

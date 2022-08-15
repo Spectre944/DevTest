@@ -7,6 +7,8 @@
 
 #include <QThread>
 
+#include <QtMath>
+
 
 #include "devices.h"
 
@@ -49,6 +51,8 @@ private slots:
     void on_comboBoxFontSize_currentIndexChanged(int index);
 
     void on_checkBoxManualMode_stateChanged(int arg1);
+
+    void on_pushButtonSVDataReq_clicked();
 
 private:
 

@@ -11,7 +11,7 @@ Devices::Devices(QObject *parent) : QObject(parent)
     errorAIRMAR   = 3;             // Сбросили счетчик ошибок AirMar    - 3 - для теста
     errorCHEMPRO  = 3;             // Сбросили счетчик ошибок ChemPro   - 3 - для теста
 
-    minPed = MIN_PED;
+    minPed = static_cast<float>(MIN_PED) ;
 
     saveDeviceRequest();   // Формируем (одноразово) QByteArray массивы запросов к девайсам
 
@@ -41,7 +41,7 @@ void Devices::startDeviceThread()
 
 ///////////////////////////////////// СВНГ-Т НАЧАЛО /////////////////////////////////////////////////////////
 
-    svng_port = new QSerialPort(this);        // СОМ-порт для опроса СВНГ-Т
+    svng_port = new QSerialPort();     // this   // СОМ-порт для опроса СВНГ-Т
     openSvngSerialPort(SVNG_PORT);            // После создания указателя на СОМ-порт сразу открываем его
     connect(svng_port, &QSerialPort::readyRead, this, &Devices::readSvngData);
 
@@ -275,7 +275,7 @@ void Devices::exec_req_command()              // Слот старта опро�
 
 
 bool Devices::openSvngSerialPort(const QString &portName)
-{
+{   
     if (svng_port->isOpen()) {
         svng_port->close();
     }
@@ -284,7 +284,7 @@ bool Devices::openSvngSerialPort(const QString &portName)
     svng_port->setDataBits(QSerialPort::Data8);
     svng_port->setParity(QSerialPort::Parity::NoParity);
     svng_port->setStopBits(QSerialPort::StopBits::OneStop);
-    svng_port->setFlowControl(QSerialPort::FlowControl::NoFlowControl);
+    svng_port->setFlowControl(QSerialPort::FlowControl::NoFlowControl);    
 
     return svng_port->open(QSerialPort::ReadWrite);
 }
@@ -336,9 +336,14 @@ void Devices::readSvngData()
     devErrorTimer->stop();   // Останавливаем таймер ошибок - прибор ответил
     QByteArray receiveBuff;
 
+    QByteArray testBuff; // Потом убрать
+    testBuff.clear();
+
     receiveBuff.append(svng_port->readAll());
     while(svng_port->waitForReadyRead(8))
         receiveBuff.append(svng_port->readAll()); // Прочитали всю информацию из СОМ-порта
+
+    testBuff = receiveBuff.toHex().toUpper();
 
     svng_port->clear();     // Очистили СОМ-порт
 
@@ -394,6 +399,8 @@ void Devices::readSvngData()
             *(point + 1) =  receiveBuff.at(i + 1);
             *(point + 2) =  receiveBuff.at(i + 2);
             *(point + 3) =  receiveBuff.at(i + 3);                      // Вытягиваем целочисленное значение ПЕД
+
+            i_digit = receiveBuff.mid(i + 5, 1).toHex().toUInt(&ok, 16); // Вытягиваем значение тестового байта
 
             if(i_digit & 0x80)                                          //  Записали коэфф (0.1 или 0.01)
                 koeff = static_cast<float>(0.1);

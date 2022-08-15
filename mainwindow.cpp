@@ -123,8 +123,8 @@ void MainWindow::showAngleSvng(int value)
     painter.fillPath(path,Qt::yellow);
 
     //draw text over arc with position depending on angle
-    int x = cos((value + correctAngle) *M_PI/180) * radius;
-    int y = sin((value + correctAngle)*M_PI/180) * radius;
+    int x = cos((value + correctAngle) * M_PI / 180) * radius;
+    int y = sin((value + correctAngle) * M_PI / 180) * radius;
 
     //show symbol
     QRect textPos( x, -y, pixmap.width(), pixmap.height());
@@ -187,6 +187,7 @@ switch (index) {
 bool MainWindow::startDevicesThread()   // Ф-ция старта потока для работы с девайсами
 {
     devices = new Devices();
+
     devicesThread = new QThread();   // Cоздали объект и поток для объекта работы с девайсами
 
     devices->moveToThread(devicesThread);  // Переместили  объект в поток
@@ -209,7 +210,7 @@ bool MainWindow::startDevicesThread()   // Ф-ция старта потока �
     /*
     * Коннект слота передачи указателя на объект данных из Devices в MainWindow
     */
-    connect(devices, &Devices::transmitDataObject, this, &MainWindow::receiveDataObject); // //   send_req_command      exec_req_command
+    connect(devices, &Devices::transmitDataObject, this, &MainWindow::receiveDataObject);
 
     /*
     * Коннект слота старта опроса девайсов  из MainWindow в Devices
@@ -226,6 +227,11 @@ bool MainWindow::startDevicesThread()   // Ф-ция старта потока �
     * Запускаем поток и возвращаем активность потока
     */
     devicesThread->start();
+
+    bool res = false;
+
+    res = devicesThread->isRunning();
+
     return devicesThread->isRunning();
 }
 
@@ -449,6 +455,17 @@ void MainWindow::receiveDataObject(All_Devices_Info *dataObj)  // Слот пр�
 //////////////////////////////// ОБРАБАТЫВАЕМ КОПИЮ ИНФОРМ. ОБЪЕКТА ДЛЯ GUI ОКОНЧАНИЕ //////////////////////////////////////////////////////////////
 
 
+
+
+
+
+
+
+
+
+
+
+
 }
 
 
@@ -478,13 +495,25 @@ void MainWindow::on_checkBoxManualMode_stateChanged(int arg1)
 {
     if(arg1 == Qt::Checked)  {   // Авторежим опроса
         autoReqMode = true;
+        ui->pushButtonSVDataReq->setEnabled(false);
         emit send_req_command();
     }
 
-    else if(arg1 == Qt::Unchecked)    // Ручной режим опроса
+    else if(arg1 == Qt::Unchecked) {    // Ручной режим опроса
          autoReqMode = false;
+          ui->pushButtonSVDataReq->setEnabled(true);
+    }
 
     else
         return;
+}
+
+
+void MainWindow::on_pushButtonSVDataReq_clicked()  // Запит даних
+{
+    if(ui->checkBoxManualMode->isChecked())
+        return;
+
+    emit send_req_command();
 }
 
