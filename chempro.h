@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QDate>
 
 
 #define StatusCode 4
@@ -16,7 +17,7 @@
 #define ShutDown 131
 #define GetBatInfo 175
 
-#define GetV3Meas 4
+#define GetV3Meas 36
 #define GetAges 139
 #define GetTimeAndDate 143
 #define SetTimeAndDate 144
@@ -26,6 +27,7 @@
 #define EraseAlarmMemo 165
 #define GetDiagErrors 167
 #define IsSystemBusy 172
+#define SensorTestOnOff 191
 
 
 #define CRC_LENGHT 2
@@ -62,28 +64,23 @@ public:
 
     ChemPro();
 
-    QString getSensorStatus(unsigned char FCode);
-    QString resetSystem(unsigned char FCode);
-    QString setBaudrate(unsigned char FCode);
+    //function that can transmmit 10 difrent packages
+    QByteArray commonReq(unsigned char FCode);
 
-    QString getAlarmData(unsigned char FCode);
-    QString getNumOfAlarmMemoItem(unsigned char FCode);
-    QString getGasLibState(unsigned char FCode);
-    QString setGasLibState(unsigned char FCode);
-    QString getGasLibInfo(unsigned char FCode);
-    QString shutDown(unsigned char FCode);
-    QString getBatInfo(unsigned char FCode);
-    QString getV3Meas(unsigned char FCode);
-    QString getAges(unsigned char FCode);
-    QString getTimeAndDate(unsigned char FCode);
-    QString setTimeAndDate(unsigned char FCode);
-    QString getDataLogSize(unsigned char FCode);
-    QString getDataLogData(unsigned char FCode);
-    QString getAlarmMemoItem(unsigned char FCode);
-    QString eraseAlarmMemoItem(unsigned char FCode);
-    QString getDiagErrors(unsigned char FCode);
-    QString isSystemBusy(unsigned char FCode);
-    QString sensorTestOnOff(unsigned char FCode);
+    QByteArray resetSystem();
+    QByteArray setBaudrate(unsigned char baudRate);
+    QByteArray getAlarmData(unsigned char flushFIFO);
+    QByteArray getGasLibInfo(unsigned char elementIndex);
+    QByteArray setGasLibState(unsigned char gasLibIndex, unsigned char subsetIndex);
+    QByteArray sensorTestOnOff(unsigned char testOn);
+    QByteArray getDataLogData(unsigned char adress, unsigned char numOfBytes);
+    QByteArray eraseAlarmMemoItem();
+    QByteArray shutDown();
+    QByteArray setTimeAndDate();
+
+
+
+
 
 
 
@@ -161,18 +158,68 @@ const unsigned char crclo[] = {
 // output: CRC16 value
 unsigned short CRC16(unsigned char *Data, unsigned long DataLen);
 
-QString retByteArray(unsigned char *Data, unsigned long DataLen);
+QByteArray retByteArray(unsigned char *Data, unsigned long DataLen);
 
 /*
  *  HEADER FOR ALL PACKAGES
 */
+
+//MsgHeader Function Code если значение 5 - передача сырых данных, если 10 - изменение номера девайса
+//Стандартный номер девайса 10 (не менять)
+//Ответ будет только в случае сопадения CRC и Кода пакета
+
+struct MsgHeader
+{
+    unsigned char DeviceId = 10;
+    unsigned char FunctionCode = 5;
+};
+
 struct SerDataHeader
 {
-    unsigned char FunctionCode;
-    unsigned char NumOfBytes;
-    unsigned short NumOfBytes16;
-    //unsigned short CRC16;
+    unsigned char FunctionCode;       //FunctionCode - ID пакета
+    unsigned char NumOfBytes = 0;         //Если длина структуры <= 256 NOB и NOB16 заполняются одинаково
+    unsigned short NumOfBytes16 = 0;      //Если длина структуры > 256 NOB = 0, NOB16 - кол-во посчитанных байт
 };
+
+
+struct MsgTail
+{
+    unsigned char CrcHi;
+    unsigned char CrcLo;
+};
+
+/*7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
+ *  ERRORS WHILE TRANSMITTING
+*/
+
+struct SC_ErrorReplyMessage
+{
+    struct SerDataHeader Header;
+    unsigned char ErrorCode;
+    unsigned char Reserved;
+};
+
+enum SerialErrors
+{
+    SCERR_UnKnownCmd=1,     //Нераспознанная команда
+    SCERR_WrongCmdCode,     //Ошибка в коммуникации (теоретически не должен появлятся вообще)
+    SCERR_OutOfRange,       //???
+    SCERR_InvalidMsgSize,   //Неправильный указанный размер пакета по сравнению с тем что запрограммировано в FunctionCode
+    SCERR_CmdDisabled       //Нет доступа к запрошенным командам (типа режим админа)
+};
+
+
+/*7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
+ *  COMMON STRUCT
+*/
+
+struct SC_Sensor_GetCommon
+{
+    struct MsgHeader msgHeader = {10, 5};
+    struct SerDataHeader Header = {0, 4, 4};
+    struct MsgTail msgTail = {0,0};
+};
+
 
 
 /*7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
@@ -210,6 +257,13 @@ struct SC_Processor_ResetSystemReplyMessage
     struct SerDataHeader Header;
 };
 
+//User struct
+struct SC_Sensor_UReset
+{
+    struct MsgHeader msgHeader = {10, 5};
+    struct SC_Processor_ResetSystemRequestMessage msgContent;
+    struct MsgTail msgTail = {0,0};
+};
 
 /*
  *  SET BAUDRATE
@@ -229,6 +283,14 @@ struct SC_Processor_SetBaudRateRequestMessage
 struct SC_Processor_SetBaudRateReplyMessage
 {
     struct SerDataHeader Header;
+};
+
+//User struct
+struct SC_Sensor_UBaudRate
+{
+    struct MsgHeader msgHeader = {10, 5};
+    struct SC_Processor_SetBaudRateRequestMessage msgContent = {{BaudrateCode, 0, 0}, 0, 0};
+    struct MsgTail msgTail = {0,0};
 };
 
 /*7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
@@ -366,6 +428,14 @@ struct SC_Processor_SetTimeAndDateReplyMessage
     struct SerDataHeader Header;
 };
 
+//User struct
+struct SC_Sensor_USetTime
+{
+    struct MsgHeader msgHeader = {10, 5};
+    struct SC_Processor_SetTimeAndDateRequestMessage msgContent = {{SetTimeAndDate, 0, 0}};
+    struct MsgTail msgTail = {0,0};
+};
+
 /*7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
  *  GET DATA LOG SIZE
 */
@@ -402,6 +472,14 @@ struct SC_Processor_GetDataLogDataReplyMessage
     unsigned char Data[MAXDATALOGDATASIZE];
 };
 
+//user Struct
+struct SC_Sensor_UGetDataLogData
+{
+    struct MsgHeader msgHeader = {10, 5};
+    struct SC_Processor_GetDataLogDataRequestMessage msgContent = {{GetDataLogData, 0, 0}, 0, 0, 0};
+    struct MsgTail msgTail = {0,0};
+};
+
 /*
     NumOfBytes indicates the amount of data to be read. Maximum size is MAXDATALOGDATASIZE bytes.
     NumOfBytes field in the reply message indicates the amount of data read.
@@ -423,6 +501,14 @@ struct SC_Processor_GetAlarmDataRequestMessage
 {
     struct SerDataHeader Header;
     unsigned short FlushFIFO; // set this variable to 1 to FLUSH the FIFO
+};
+
+//User struct
+struct SC_Sensor_UGetAlarmData
+{
+    struct MsgHeader msgHeader = {10, 5};
+    struct SC_Processor_GetAlarmDataRequestMessage msgContent = {{AlarmData, 0, 0}, 0};
+    struct MsgTail msgTail = {0,0};
 };
 
 struct LogDetInfoStr
@@ -457,6 +543,26 @@ struct SC_Processor_GetAlarmDataReplyMessage
     unsigned char NumOfBytes;
     unsigned char Reserved;
     LogDetInfoStr Data;
+};
+
+struct SC_Processor_SensortestOnOffReplyMessage
+{
+    struct SerDataHeader Header;
+    unsigned char ErrorCode; //Possible error when activating test
+    //(enum SC_SensortestModeErrorCodes)
+    unsigned char Reserved;
+};
+
+//Error codes for sensor test reply message
+enum SC_SensortestModeErrorCodes
+{
+    SC_STMEC_NoError=0, // No error
+    SC_STMEC_NoCurrLib, // No library in use in device
+    SC_STMEC_NoTestSubset, // No test subset in current library
+    SC_STMEC_Alarm, // Alarm is on
+    SC_STMEC_GDError, // Gas detection error
+    SC_STMEC_SystemBusy, // Device is doing something more important
+    SC_STMEC_UINotInMeasState // User interface is not in measurement state
 };
 
 /*
@@ -549,6 +655,14 @@ struct SC_Processor_EraseAlarmMemoReplyMessage
     struct SerDataHeader Header;
 };
 
+//User struct
+struct SC_Sensor_UEraseAlarmMemo
+{
+    struct MsgHeader msgHeader = {10, 5};
+    struct SC_Processor_EraseAlarmMemoRequestMessage msgContent = {{EraseAlarmMemo, 0, 0},""};
+    struct MsgTail msgTail = {0,0};
+};
+
 /*7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
  * GET DIAG ERRORS
 */
@@ -607,6 +721,14 @@ struct Fixed_SetGasLibInUseReplyMessage
     unsigned char Reserved;
 };
 
+//User struct
+struct SC_Sensor_USetGasLibUse
+{
+    struct MsgHeader msgHeader = {10, 5};
+    struct Fixed_SetGasLibInUseRequestMessage msgContent = {{SetGasLibState, 0, 0}, "", 0, 0};
+    struct MsgTail msgTail = {0,0};
+};
+
 /*7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
  * GET GAS LIB INFO
 */
@@ -623,6 +745,14 @@ struct SC_Processor_GetGasLibInfoReplyMessage
     char SubSetName[NUMOFSUBSETS][SUBSETNAMESIZE]; //Null if no subset available
 };
 
+//User struct
+struct SC_Sensor_UGetGasLibInfo
+{
+    struct MsgHeader msgHeader = {10, 5};
+    struct SC_Processor_GetGasLibInfoRequestMessage msgContent = {{GetGasLibInfo, 0, 0}, 0};
+    struct MsgTail msgTail = {0,0};
+};
+
 /*7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
  * SHUTDOWN AND REMOTE POWER UP
 */
@@ -637,6 +767,14 @@ struct SC_Processor_ShutDownRequestMessage
 struct SC_Processor_ShutDownReplyMessage
 {
     struct SerDataHeader Header;
+};
+
+//User struct
+struct SC_Sensor_UShutDown
+{
+    struct MsgHeader msgHeader = {10, 5};
+    struct SC_Processor_ShutDownRequestMessage msgContent = {{ShutDown, 0, 0}};
+    struct MsgTail msgTail = {0,0};
 };
 
 /*7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
@@ -675,5 +813,22 @@ struct SC_Processor_GetBattInfoReplyMessage
     struct BattInfoStr BattInfo;
 };
 
+/*7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
+ * SENSOR TEST
+*/
+
+struct SC_Processor_SensortestOnOffRequestMessage
+{
+    struct SerDataHeader Header;
+    unsigned char TestOnOff; //0=test off, 1=test on
+    unsigned char Reserved;
+};
+
+struct SC_Sensor_USensorTestOnOff
+{
+    struct MsgHeader msgHeader = {10, 5};
+    struct SC_Processor_SensortestOnOffRequestMessage msgContent = {{SensorTestOnOff, 0, 0}, 0, 0};
+    struct MsgTail msgTail = {0,0};
+};
 
 #endif // CHEMPRO_H

@@ -6,175 +6,344 @@ ChemPro::ChemPro()
 
 }
 
-QString ChemPro::getSensorStatus(unsigned char FCode)
+
+/*
+    AVALIABLE COMMANDS
+
+    StatusCode;
+    GetV3Meas;
+    GetAges;
+    GetTimeAndDate;
+    GetDataLogSize;
+    GetAlarmMemoItem;
+    GetDiagErrors;
+    GetGasLibState;
+    IsSystemBusy;
+    GetBatInfo;
+*/
+QByteArray ChemPro::commonReq(unsigned char FCode)
 {
-    SC_Sensor_GetStatusRequestMessage get;
+    QByteArray retArr;
+    int tmpCrc = 0;
 
-    get.Header.FunctionCode = FCode;
-    get.Header.NumOfBytes = sizeof(SC_Sensor_GetStatusRequestMessage);
-    get.Header.NumOfBytes16 = sizeof(SC_Sensor_GetStatusRequestMessage);
+    //Fill structure by default, only diffrence FCode
+    SC_Sensor_GetCommon get = { {10, 5},
+                                {FCode, 4, 4},
+                                {0, 0}};
 
-    //header.CRC16 = CRC16(&header.FunctionCode,header.NumOfBytes16);
+    //Calculate CRC
+    tmpCrc = CRC16(&get.Header.FunctionCode, 4);
 
-    QString tmpStr = 0;
+    //rewrite CRC
+    get.msgTail.CrcLo = tmpCrc;
+    get.msgTail.CrcHi = tmpCrc >> 8;
 
-    tmpStr.append(retByteArray(&get.Header.FunctionCode,sizeof(get)));
-    tmpStr.append('\n');
+    retArr.clear();
+    retArr = retByteArray(&get.msgHeader.DeviceId, 8);
 
-    //Reply msg
-    SC_Sensor_GetStatusReplyMessage repply;
-
-    repply.Header = get.Header;
-
-    repply.Header.NumOfBytes = sizeof(SC_Sensor_GetStatusReplyMessage);
-    repply.Header.NumOfBytes16 = sizeof(SC_Sensor_GetStatusReplyMessage);
-
-    //error flags
-    repply.Status.ErrorFlags = 0;
-    repply.Status.ErrorFlags = 1;
-
-    tmpStr.append(retByteArray(&repply.Header.FunctionCode, sizeof(repply)));
-
-
-    return tmpStr;
+    return retArr;
 }
 
-QString ChemPro::resetSystem(unsigned char FCode)
+
+
+QByteArray ChemPro::resetSystem()
 {
-    SC_Processor_ResetSystemRequestMessage get;
+    QByteArray retArr;
 
-    get.Header.FunctionCode = FCode;
-    get.Header.NumOfBytes = sizeof(SC_Processor_ResetSystemRequestMessage);
-    get.Header.NumOfBytes16 = sizeof(SC_Processor_ResetSystemRequestMessage);
-
-
-    get.AuthorizationCode[0] = 'R';
-    get.AuthorizationCode[1] = 'e';
-    get.AuthorizationCode[2] = 's';
-    get.AuthorizationCode[3] = 'e';
-    get.AuthorizationCode[4] = 't';
-    get.AuthorizationCode[5] = 'o';
-    get.AuthorizationCode[6] = 'i';
-    get.AuthorizationCode[7] = ' ';
-    get.AuthorizationCode[8] = 'v';
-    get.AuthorizationCode[9] = 'a';
-    get.AuthorizationCode[10] = 'a';
-    get.AuthorizationCode[11] = 'n';
+    unsigned char size = sizeof(SC_Processor_ResetSystemRequestMessage);
+    int tmpCrc = 0;
 
 
+    SC_Sensor_UReset get =  { {10, 5},
+                            { {ResetCode, size, size}, {'R','e','s','e','t','o','i',' ','v','a','a','n'}},
+                              {0, 0}};
+    //Calculate CRC (только msgContent)
+    tmpCrc = CRC16(&get.msgContent.Header.FunctionCode, size);
 
-    QString tmpStr = 0;
+    //rewrite CRC (весь пакет)
+    get.msgTail.CrcLo = tmpCrc;
+    get.msgTail.CrcHi = tmpCrc >> 8;
 
-    tmpStr.append(retByteArray(&get.Header.FunctionCode,sizeof(get)));
-    tmpStr.append('\n');
+    retArr.clear();
+    retArr = retByteArray(&get.msgHeader.DeviceId, sizeof(SC_Sensor_UReset));
 
-    //Reply msg
-    SC_Processor_ResetSystemReplyMessage repply;
+    return retArr;
 
-    repply.Header = get.Header;
-
-    repply.Header.NumOfBytes = sizeof(SC_Processor_ResetSystemReplyMessage);
-    repply.Header.NumOfBytes16 = sizeof(SC_Processor_ResetSystemReplyMessage);
-
-    tmpStr.append(retByteArray(&repply.Header.FunctionCode, sizeof(repply)));
-
-    return tmpStr;
+    //repply is SC_Processor_ResetSystemReplyMessage (only header and size)
 }
 
-QString ChemPro::setBaudrate(unsigned char FCode)
+QByteArray ChemPro::setBaudrate(unsigned char baudRate)
 {
+    QByteArray retArr;
 
-    SC_Processor_SetBaudRateRequestMessage get;
-
-    get.Header.FunctionCode = FCode;
-    get.Header.NumOfBytes = sizeof(SC_Processor_SetBaudRateRequestMessage);
-    get.Header.NumOfBytes16 = sizeof(SC_Processor_SetBaudRateRequestMessage);
-
-    get.BaudRate = 3;
-    get.Reserved = 0;
-    //header.CRC16 = CRC16(&header.FunctionCode,header.NumOfBytes16);
-
-    QString tmpStr = 0;
-
-    tmpStr.append(retByteArray(&get.Header.FunctionCode,sizeof(get)));
-    tmpStr.append('\n');
-
-    //Reply msg
-    SC_Processor_SetBaudRateReplyMessage repply;
-
-    repply.Header = get.Header;
-
-    repply.Header.NumOfBytes = sizeof(SC_Processor_SetBaudRateReplyMessage);
-    repply.Header.NumOfBytes16 = sizeof(SC_Processor_SetBaudRateReplyMessage);
-
-    tmpStr.append(retByteArray(&repply.Header.FunctionCode, sizeof(repply)));
+    unsigned char size = sizeof(SC_Processor_SetBaudRateRequestMessage);
+    int tmpCrc = 0;
 
 
-    return tmpStr;
+    SC_Sensor_UBaudRate get ={ {10, 5},
+                             { {BaudrateCode, size, size}, baudRate, 0},
+                               {0, 0}};
+
+    //Calculate CRC (только msgContent)
+    tmpCrc = CRC16(&get.msgContent.Header.FunctionCode, size);
+
+
+    get.msgTail.CrcLo = tmpCrc;
+    get.msgTail.CrcHi = tmpCrc >> 8;
+
+    //rewrite CRC (весь пакет)
+    retArr.clear();
+    retArr = retByteArray(&get.msgHeader.DeviceId, sizeof(SC_Sensor_UBaudRate));
+
+    return retArr;
+
+    //repply is SC_Processor_SetBaudRateReplyMessage (only header and size)
+
 }
 
-QString ChemPro::getV3Meas(unsigned char FCode)
+QByteArray ChemPro::getAlarmData(unsigned char flushFIFO)
 {
 
-    SC_Sensor_GetV3MeasRequestMessage get;
+    //запросы на чтение не чаще 1 секунды для избежания потери данных
+    QByteArray retArr;
 
-    get.Header.FunctionCode = FCode;
-    get.Header.NumOfBytes = sizeof(SC_Sensor_GetV3MeasRequestMessage);
-    get.Header.NumOfBytes16 = sizeof(SC_Sensor_GetV3MeasRequestMessage);
-
-
-    //header.CRC16 = CRC16(&header.FunctionCode,header.NumOfBytes16);
-
-    QString tmpStr = 0;
-
-    tmpStr.append(retByteArray(&get.Header.FunctionCode,sizeof(get)));
-    tmpStr.append('\n');
-
-    //Reply msg
-    SC_Sensor_GetV3MeasReplyMessage repply;
-
-    repply.Header = get.Header;
-
-    repply.Header.NumOfBytes = sizeof(SC_Sensor_GetV3MeasReplyMessage);
-    repply.Header.NumOfBytes16 = sizeof(SC_Sensor_GetV3MeasReplyMessage);
+    unsigned char size = sizeof(SC_Processor_GetAlarmDataRequestMessage);
+    int tmpCrc = 0;
 
 
-    tmpStr.append(retByteArray(&repply.Header.FunctionCode, sizeof(repply)));
+    SC_Sensor_UGetAlarmData get = { {10, 5},
+                                 { {AlarmData, size, size}, flushFIFO},
+                                   {0, 0}};
+
+    //Calculate CRC (только msgContent)
+    tmpCrc = CRC16(&get.msgContent.Header.FunctionCode, size);
 
 
-    return tmpStr;
+    get.msgTail.CrcLo = tmpCrc;
+    get.msgTail.CrcHi = tmpCrc >> 8;
+
+    //rewrite CRC (весь пакет)
+    retArr.clear();
+    retArr = retByteArray(&get.msgHeader.DeviceId, sizeof(SC_Sensor_UGetAlarmData));
+
+    return retArr;
+
+    //repply is SC_Processor_GetAlarmDataReplyMessage
+
 }
 
-QString ChemPro::getAges(unsigned char FCode)
+QByteArray ChemPro::getGasLibInfo(unsigned char elementIndex)
+{
+    //запросы на чтение не чаще 1 секунды для избежания потери данных
+    QByteArray retArr;
+
+    unsigned char size = sizeof(SC_Processor_GetGasLibInfoRequestMessage);
+    int tmpCrc = 0;
+
+
+    SC_Sensor_UGetGasLibInfo get = { {10, 5},
+                                 { {GetGasLibInfo, size, size}, elementIndex},
+                                   {0, 0}};
+
+    //Calculate CRC (только msgContent)
+    tmpCrc = CRC16(&get.msgContent.Header.FunctionCode, size);
+
+
+    get.msgTail.CrcLo = tmpCrc;
+    get.msgTail.CrcHi = tmpCrc >> 8;
+
+    //rewrite CRC (весь пакет)
+    retArr.clear();
+    retArr = retByteArray(&get.msgHeader.DeviceId, sizeof(SC_Sensor_UGetGasLibInfo));
+
+    return retArr;
+
+    //repply is SC_Processor_GetGasLibInfoReplyMessage
+}
+
+QByteArray ChemPro::setGasLibState(unsigned char gasLibIndex, unsigned char subsetIndex)
+{
+    QByteArray retArr{0};
+
+    unsigned char size = sizeof(Fixed_SetGasLibInUseRequestMessage);
+    int tmpCrc = 0;
+
+    //выйти если неверный диапазон, неправильные данные могут сломать детектор
+//УТОЧНИТЬ
+    if(gasLibIndex > 30 || subsetIndex > 30){
+        qDebug() << "Wrong range SetGasLib";
+        return retArr;
+    }
+     SC_Sensor_USetGasLibUse get = { {10, 5},
+                                   { {SetGasLibState, size, size},
+                                     {'S','a','a',' ','v','a','i','h','t','a','a',' ','k','i','r','j','a','s','t','o','a','.'},
+                                     gasLibIndex, subsetIndex},
+                                     {0, 0}};
+
+    //Calculate CRC (только msgContent)
+    tmpCrc = CRC16(&get.msgContent.Header.FunctionCode, size);
+
+
+    get.msgTail.CrcLo = tmpCrc;
+    get.msgTail.CrcHi = tmpCrc >> 8;
+
+    //rewrite CRC (весь пакет)
+    retArr.clear();
+    retArr = retByteArray(&get.msgHeader.DeviceId, sizeof(SC_Sensor_USetGasLibUse));
+
+    return retArr;
+
+    //repply is Fixed_SetGasLibInUseReplyMessage
+
+}
+
+QByteArray ChemPro::sensorTestOnOff(unsigned char testOn)
+{
+    QByteArray retArr{0};
+
+    unsigned char size = sizeof(SC_Processor_SensortestOnOffRequestMessage);
+    int tmpCrc = 0;
+
+     SC_Sensor_USensorTestOnOff get = { {10, 5},
+                                      { {SensorTestOnOff, size, size}, testOn , 0},
+                                        {0, 0}};
+
+    //Calculate CRC (только msgContent)
+    tmpCrc = CRC16(&get.msgContent.Header.FunctionCode, size);
+
+
+    get.msgTail.CrcLo = tmpCrc;
+    get.msgTail.CrcHi = tmpCrc >> 8;
+
+    //rewrite CRC (весь пакет)
+    retArr.clear();
+    retArr = retByteArray(&get.msgHeader.DeviceId, sizeof(SC_Sensor_USensorTestOnOff));
+
+    return retArr;
+
+    //repply is SC_Processor_SensortestOnOffReplyMessage
+}
+
+QByteArray ChemPro::getDataLogData(unsigned char adress, unsigned char numOfBytes)
 {
 
-    SC_Processor_GetAgesRequestMessage get;
+    //numOfBytes берётся из запроса GetDataLogSize
+    QByteArray retArr{0};
 
-    get.Header.FunctionCode = FCode;
-    get.Header.NumOfBytes = sizeof(SC_Processor_GetAgesRequestMessage);
-    get.Header.NumOfBytes16 = sizeof(SC_Processor_GetAgesRequestMessage);
+    unsigned char size = sizeof(SC_Processor_GetDataLogDataRequestMessage);
+    int tmpCrc = 0;
 
+     SC_Sensor_UGetDataLogData get = { {10, 5},
+                                      { {GetDataLogData, size, size}, adress , numOfBytes, 0},
+                                        {0, 0}};
 
-    //header.CRC16 = CRC16(&header.FunctionCode,header.NumOfBytes16);
-
-    QString tmpStr = 0;
-
-    tmpStr.append(retByteArray(&get.Header.FunctionCode,sizeof(get)));
-    tmpStr.append('\n');
-
-    //Reply msg
-    SC_Processor_GetAgesReplyMessage100i repply;
-
-    repply.Header = get.Header;
-
-    repply.Header.NumOfBytes = sizeof(SC_Processor_GetAgesReplyMessage100i);
-    repply.Header.NumOfBytes16 = sizeof(SC_Processor_GetAgesReplyMessage100i);
-
-    tmpStr.append(retByteArray(&repply.Header.FunctionCode, sizeof(repply)));
+    //Calculate CRC (только msgContent)
+    tmpCrc = CRC16(&get.msgContent.Header.FunctionCode, size);
 
 
-    return tmpStr;
+    get.msgTail.CrcLo = tmpCrc;
+    get.msgTail.CrcHi = tmpCrc >> 8;
+
+    //rewrite CRC (весь пакет)
+    retArr.clear();
+    retArr = retByteArray(&get.msgHeader.DeviceId, sizeof(SC_Sensor_UGetDataLogData));
+
+    return retArr;
+
+    //repply is SC_Processor_GetDataLogDataReplyMessage
 }
+
+QByteArray ChemPro::eraseAlarmMemoItem()
+{
+    QByteArray retArr{0};
+
+    unsigned char size = sizeof(SC_Processor_EraseAlarmMemoRequestMessage);
+    int tmpCrc = 0;
+
+     SC_Sensor_UEraseAlarmMemo get = { {10, 5},
+                                       { {EraseAlarmMemo, size, size},
+                                        {'K','y','l','l',132,' ','l',132,'h','t','e','e',' ','a','l','a','r','m','m','e','m','o','t','!'}},
+                                        {0, 0}};
+
+    //Calculate CRC (только msgContent)
+    tmpCrc = CRC16(&get.msgContent.Header.FunctionCode, size);
+
+
+    get.msgTail.CrcLo = tmpCrc;
+    get.msgTail.CrcHi = tmpCrc >> 8;
+
+    //rewrite CRC (весь пакет)
+    retArr.clear();
+    retArr = retByteArray(&get.msgHeader.DeviceId, sizeof(SC_Sensor_UEraseAlarmMemo));
+
+    return retArr;
+
+    //repply is SC_Processor_EraseAlarmMemoReplyMessage
+}
+
+QByteArray ChemPro::shutDown()
+{
+    QByteArray retArr{0};
+
+    unsigned char size = sizeof(SC_Processor_ShutDownRequestMessage);
+    int tmpCrc = 0;
+
+     SC_Sensor_UShutDown get = { {10, 5},
+                                       { {ShutDown, size, size},
+                                        {'S','a','a',' ','s','a','m','m','u','t','t','a','a','!'}},
+                                        {0, 0}};
+
+    //Calculate CRC (только msgContent)
+    tmpCrc = CRC16(&get.msgContent.Header.FunctionCode, size);
+
+
+    get.msgTail.CrcLo = tmpCrc;
+    get.msgTail.CrcHi = tmpCrc >> 8;
+
+    //rewrite CRC (весь пакет)
+    retArr.clear();
+    retArr = retByteArray(&get.msgHeader.DeviceId, sizeof(SC_Sensor_UShutDown));
+
+    return retArr;
+
+    //repply is SC_Processor_ShutDownReplyMessage
+}
+
+QByteArray ChemPro::setTimeAndDate()
+{
+    QByteArray retArr{0};
+
+    QDate curDate;
+    QTime curTime;
+
+    unsigned char size = sizeof(SC_Processor_SetTimeAndDateRequestMessage);
+    int tmpCrc = 0;
+
+//     SC_Sensor_USetTime get = { {10, 5},
+//                              { {SetTimeAndDate, size, size},{curDate.year(), curDate.month(), curDate.day(), curTime.hour(), curTime.minute(), curTime.second(), curDate.dayOfWeek()}},
+//                                {0, 0}};
+
+    SC_Sensor_USetTime get = { {10, 5},
+                             { {SetTimeAndDate, size, size},{0, 0, 0, 0, 0, 0, 0}},
+                               {0, 0}};
+
+    //Calculate CRC (только msgContent)
+    tmpCrc = CRC16(&get.msgContent.Header.FunctionCode, size);
+
+
+    get.msgTail.CrcLo = tmpCrc;
+    get.msgTail.CrcHi = tmpCrc >> 8;
+
+    //rewrite CRC (весь пакет)
+    retArr.clear();
+    retArr = retByteArray(&get.msgHeader.DeviceId, sizeof(SC_Sensor_USetTime));
+
+    return retArr;
+
+    //repply is SC_Processor_SetTimeAndDateReplyMessage
+}
+
+
 
 unsigned short CRC16(unsigned char *Data, unsigned long DataLen)
 {
@@ -190,11 +359,12 @@ unsigned short CRC16(unsigned char *Data, unsigned long DataLen)
     return(hi*256 | lo);
 }
 
-QString retByteArray(unsigned char *Data, unsigned long DataLen)
+
+QByteArray retByteArray(unsigned char *Data, unsigned long DataLen)
 {
     QByteArray bArray;
     QString array;
-    char index;
+    unsigned char index;
 
     while(DataLen--)
     {
@@ -202,6 +372,6 @@ QString retByteArray(unsigned char *Data, unsigned long DataLen)
         bArray.append(index);
     }
 
-    return bArray.toHex(' ');
+    return bArray;
 }
 

@@ -1,0 +1,4 @@
+#ignore user and backup files
+*.bak
+*.pro.user
+*.pro.user.*

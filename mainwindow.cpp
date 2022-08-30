@@ -77,6 +77,27 @@ MainWindow::MainWindow(QWidget *parent)
     startDevicesThread();
 
 
+    ChemPro pro;
+
+
+    /*
+    StatusCode;
+    GetV3Meas;
+    GetAges;
+    GetTimeAndDate;
+    GetDataLogSize;
+    GetAlarmMemoItem;
+    GetDiagErrors;
+    GetGasLibState;
+    IsSystemBusy;
+    GetBatInfo;
+    */
+    pro.commonReq(GetV3Meas);
+    pro.resetSystem();
+    pro.setBaudrate(0);
+    pro.getAlarmData(0);
+    pro.setGasLibState(0,0);
+    pro.eraseAlarmMemoItem();
 
 
 
